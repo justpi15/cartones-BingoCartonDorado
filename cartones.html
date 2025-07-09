@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Galería de Cartones</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #111;
+      color: #fff;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+      color: #d4af37;
+      margin-bottom: 40px;
+    }
+    .galeria {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+    }
+    .carton {
+      background-color: #222;
+      border: 2px solid #d4af37;
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 10px #000;
+    }
+    .carton h2 {
+      text-align: center;
+      color: #fff;
+      font-size: 1rem;
+      margin-bottom: 10px;
+    }
+    .tabla {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    .tabla th, .tabla td {
+      border: 1px solid #555;
+      padding: 5px;
+      font-size: 0.9rem;
+    }
+    .tabla th {
+      background-color: #333;
+      color: #d4af37;
+    }
+    .tabla td {
+      background-color: #000;
+    }
+    .free {
+      color: #d4af37;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎫 Galería de Cartones Fijos</h1>
+  <div class="galeria" id="galeria"></div>
+
+  <script>
+    function generarRango(inicio, fin) {
+      const nums = [];
+      for (let i = inicio; i <= fin; i++) nums.push(i);
+      return nums;
+    }
+
+    function obtenerNumerosAleatorios(rango, cantidad) {
+      const copia = [...rango];
+      const resultado = [];
+      while (resultado.length < cantidad) {
+        const i = Math.floor(Math.random() * copia.length);
+        resultado.push(copia.splice(i, 1)[0]);
+      }
+      return resultado;
+    }
+
+    function crearCarton(id) {
+      const B = obtenerNumerosAleatorios(generarRango(1, 15), 5);
+      const I = obtenerNumerosAleatorios(generarRango(16, 30), 5);
+      const N = obtenerNumerosAleatorios(generarRango(31, 45), 4);
+      const G = obtenerNumerosAleatorios(generarRango(46, 60), 5);
+      const O = obtenerNumerosAleatorios(generarRango(61, 75), 5);
+
+      const tabla = [
+        [B[0], I[0], N[0], G[0], O[0]],
+        [B[1], I[1], N[1], G[1], O[1]],
+        [B[2], I[2], 'FREE', G[2], O[2]],
+        [B[3], I[3], N[2], G[3], O[3]],
+        [B[4], I[4], N[3], G[4], O[4]]
+      ];
+
+      const html = `
+        <div class="carton">
+          <h2>Cartón ${id.toString().padStart(3, '0')}</h2>
+          <table class="tabla">
+            <thead>
+              <tr><th>B</th><th>I</th><th>N</th><th>G</th><th>O</th></tr>
+            </thead>
+            <tbody>
+              ${tabla.map(fila => `
+                <tr>
+                  ${fila.map(val => `<td class="${val === 'FREE' ? 'free' : ''}">${val}</td>`).join('')}
+                </tr>
+              `).join('')}
+            </tbody>
+          </table>
+        </div>
+      `;
+      return html;
+    }
+
+    const contenedor = document.getElementById('galeria');
+    for (let i = 1; i <= 180; i++) {
+      contenedor.innerHTML += crearCarton(i);
+    }
+  </script>
+</body>
+</html>
