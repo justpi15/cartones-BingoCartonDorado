@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Galería de Cartones</title>
+  <title>Galería de Cartones de Bingo</title>
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
@@ -19,7 +19,7 @@
     }
     .galeria {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Rejilla con 3-5 cartones por fila */
       gap: 20px;
     }
     .carton {
@@ -63,40 +63,74 @@
   <div class="galeria" id="galeria"></div>
 
   <script>
+    // Función para generar un rango de números
     function generarRango(inicio, fin) {
       const nums = [];
       for (let i = inicio; i <= fin; i++) nums.push(i);
       return nums;
     }
 
-    function obtenerNumerosAleatorios(rango, cantidad) {
-      const copia = [...rango];
-      const resultado = [];
-      while (resultado.length < cantidad) {
-        const i = Math.floor(Math.random() * copia.length);
-        resultado.push(copia.splice(i, 1)[0]);
+    // Función para obtener números únicos aleatorios de un rango
+    function obtenerNumerosUnicos(rango, cantidad) {
+      const numeros = [...rango];
+      const seleccionados = [];
+      while (seleccionados.length < cantidad) {
+        const indice = Math.floor(Math.random() * numeros.length);
+        const numero = numeros.splice(indice, 1)[0]; // Eliminar el número para evitar duplicados
+        seleccionados.push(numero);
       }
-      return resultado;
+      return seleccionados;
     }
 
-    function crearCarton(id) {
-      const B = obtenerNumerosAleatorios(generarRango(1, 15), 5);
-      const I = obtenerNumerosAleatorios(generarRango(16, 30), 5);
-      const N = obtenerNumerosAleatorios(generarRango(31, 45), 4);
-      const G = obtenerNumerosAleatorios(generarRango(46, 60), 5);
-      const O = obtenerNumerosAleatorios(generarRango(61, 75), 5);
+    // Función para crear los cartones fijos
+    function generarCartonesUnicos() {
+      const cartonesGenerados = [];
+      
+      const rangoB = generarRango(1, 15);
+      const rangoI = generarRango(16, 30);
+      const rangoN = generarRango(31, 45);
+      const rangoG = generarRango(46, 60);
+      const rangoO = generarRango(61, 75);
 
+      for (let i = 1; i <= 180; i++) {
+        const B = obtenerNumerosUnicos(rangoB, 5);
+        const I = obtenerNumerosUnicos(rangoI, 5);
+        const N = obtenerNumerosUnicos(rangoN, 4); // 4 porque el centro es "FREE"
+        const G = obtenerNumerosUnicos(rangoG, 5);
+        const O = obtenerNumerosUnicos(rangoO, 5);
+
+        // Aseguramos que "FREE" esté en la posición central
+        N.splice(2, 0, "FREE");
+
+        const carton = {
+          id: `Cartón ${i.toString().padStart(3, "0")}`,
+          B,
+          I,
+          N,
+          G,
+          O
+        };
+
+        cartonesGenerados.push(carton);
+      }
+      return cartonesGenerados;
+    }
+
+    const cartonesFijos = generarCartonesUnicos();
+
+    // Función para crear el HTML de cada cartón
+    function crearCarton(carton) {
       const tabla = [
-        [B[0], I[0], N[0], G[0], O[0]],
-        [B[1], I[1], N[1], G[1], O[1]],
-        [B[2], I[2], 'FREE', G[2], O[2]],
-        [B[3], I[3], N[2], G[3], O[3]],
-        [B[4], I[4], N[3], G[4], O[4]]
+        [carton.B[0], carton.I[0], carton.N[0], carton.G[0], carton.O[0]],
+        [carton.B[1], carton.I[1], carton.N[1], carton.G[1], carton.O[1]],
+        [carton.B[2], carton.I[2], carton.N[2], carton.G[2], carton.O[2]],
+        [carton.B[3], carton.I[3], carton.N[3], carton.G[3], carton.O[3]],
+        [carton.B[4], carton.I[4], carton.N[4], carton.G[4], carton.O[4]]
       ];
 
       const html = `
         <div class="carton">
-          <h2>Cartón ${id.toString().padStart(3, '0')}</h2>
+          <h2>${carton.id}</h2>
           <table class="tabla">
             <thead>
               <tr><th>B</th><th>I</th><th>N</th><th>G</th><th>O</th></tr>
@@ -114,10 +148,11 @@
       return html;
     }
 
-    const contenedor = document.getElementById('galeria');
-    for (let i = 1; i <= 180; i++) {
-      contenedor.innerHTML += crearCarton(i);
-    }
+    // Insertamos los cartones generados en la galería
+    const contenedor = document.getElementById("galeria");
+    cartonesFijos.forEach(carton => {
+      contenedor.innerHTML += crearCarton(carton);
+    });
   </script>
 </body>
 </html>
