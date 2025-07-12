@@ -7,6 +7,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
+      background: url('https://www.transparenttextures.com/patterns/asfalt.png'); /* Textura sutil */
       background-color: #111;
       color: #fff;
       margin: 0;
@@ -19,20 +20,25 @@
     }
     .galeria {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Rejilla con 3-5 cartones por fila */
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Aumento de tamaño de cartón */
+      gap: 30px; /* Espacio entre los cartones */
     }
     .carton {
       background-color: #222;
       border: 2px solid #d4af37;
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 0 10px #000;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+      max-width: 300px;
+      transition: transform 0.2s ease-in-out;
+    }
+    .carton:hover {
+      transform: scale(1.05); /* Efecto al pasar el mouse */
     }
     .carton h2 {
       text-align: center;
       color: #fff;
-      font-size: 1rem;
+      font-size: 1.2rem;
       margin-bottom: 10px;
     }
     .tabla {
@@ -42,8 +48,8 @@
     }
     .tabla th, .tabla td {
       border: 1px solid #555;
-      padding: 5px;
-      font-size: 0.9rem;
+      padding: 15px;
+      font-size: 1.2rem; /* Tamaño más grande para las celdas */
     }
     .tabla th {
       background-color: #333;
@@ -51,8 +57,13 @@
     }
     .tabla td {
       background-color: #000;
+      color: #fff;
     }
     .free {
+      color: #d4af37;
+      font-weight: bold;
+    }
+    .cd {
       color: #d4af37;
       font-weight: bold;
     }
@@ -63,60 +74,34 @@
   <div class="galeria" id="galeria"></div>
 
   <script>
-    // Función para generar un rango de números
-    function generarRango(inicio, fin) {
-      const nums = [];
-      for (let i = inicio; i <= fin; i++) nums.push(i);
-      return nums;
-    }
-
-    // Función para obtener números únicos aleatorios de un rango
-    function obtenerNumerosUnicos(rango, cantidad) {
-      const numeros = [...rango];
-      const seleccionados = [];
-      while (seleccionados.length < cantidad) {
-        const indice = Math.floor(Math.random() * numeros.length);
-        const numero = numeros.splice(indice, 1)[0]; // Eliminar el número para evitar duplicados
-        seleccionados.push(numero);
-      }
-      return seleccionados;
-    }
-
-    // Función para crear los cartones fijos
-    function generarCartonesUnicos() {
-      const cartonesGenerados = [];
-      
-      const rangoB = generarRango(1, 15);
-      const rangoI = generarRango(16, 30);
-      const rangoN = generarRango(31, 45);
-      const rangoG = generarRango(46, 60);
-      const rangoO = generarRango(61, 75);
-
-      for (let i = 1; i <= 180; i++) {
-        const B = obtenerNumerosUnicos(rangoB, 5);
-        const I = obtenerNumerosUnicos(rangoI, 5);
-        const N = obtenerNumerosUnicos(rangoN, 4); // 4 porque el centro es "FREE"
-        const G = obtenerNumerosUnicos(rangoG, 5);
-        const O = obtenerNumerosUnicos(rangoO, 5);
-
-        // Aseguramos que "FREE" esté en la posición central
-        N.splice(2, 0, "FREE");
-
-        const carton = {
-          id: `Cartón ${i.toString().padStart(3, "0")}`,
-          B,
-          I,
-          N,
-          G,
-          O
-        };
-
-        cartonesGenerados.push(carton);
-      }
-      return cartonesGenerados;
-    }
-
-    const cartonesFijos = generarCartonesUnicos();
+    // Lista de los cartones con los números proporcionados
+    const cartonesFijos = [
+      {
+        id: 'Cartón 001',
+        B: [10, 8, 7, 12, 6],
+        I: [19, 27, 25, 29, 20],
+        N: [38, 43, 'CD', 36, 44],
+        G: [54, 59, 52, 58, 49],
+        O: [61, 74, 67, 72, 66],
+      },
+      {
+        id: 'Cartón 002',
+        B: [4, 8, 7, 11, 15],
+        I: [26, 18, 27, 23, 25],
+        N: [31, 42, 'CD', 41, 39],
+        G: [54, 52, 59, 48, 46],
+        O: [67, 65, 68, 66, 71],
+      },
+      {
+        id: 'Cartón 003',
+        B: [7, 15, 14, 1, 11],
+        I: [21, 18, 26, 17, 28],
+        N: [41, 35, 'CD', 40, 31],
+        G: [58, 46, 57, 60, 51],
+        O: [70, 73, 63, 75, 65],
+      },
+      // ... Agrega los demás cartones aquí siguiendo el mismo formato
+    ];
 
     // Función para crear el HTML de cada cartón
     function crearCarton(carton) {
@@ -138,7 +123,7 @@
             <tbody>
               ${tabla.map(fila => `
                 <tr>
-                  ${fila.map(val => `<td class="${val === 'FREE' ? 'free' : ''}">${val}</td>`).join('')}
+                  ${fila.map(val => `<td class="${val === 'CD' ? 'cd' : ''}">${val}</td>`).join('')}
                 </tr>
               `).join('')}
             </tbody>
