@@ -7,7 +7,6 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://www.transparenttextures.com/patterns/asfalt.png'); /* Textura sutil */
       background-color: #111;
       color: #fff;
       margin: 0;
@@ -20,25 +19,20 @@
     }
     .galeria {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Aumento de tamaño de cartón */
-      gap: 30px; /* Espacio entre los cartones */
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Rejilla con 3-5 cartones por fila */
+      gap: 20px;
     }
     .carton {
       background-color: #222;
       border: 2px solid #d4af37;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
-      max-width: 300px;
-      transition: transform 0.2s ease-in-out;
-    }
-    .carton:hover {
-      transform: scale(1.05); /* Efecto al pasar el mouse */
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 10px #000;
     }
     .carton h2 {
       text-align: center;
       color: #fff;
-      font-size: 1.2rem;
+      font-size: 1rem;
       margin-bottom: 10px;
     }
     .tabla {
@@ -48,8 +42,8 @@
     }
     .tabla th, .tabla td {
       border: 1px solid #555;
-      padding: 15px;
-      font-size: 1.2rem; /* Tamaño más grande para las celdas */
+      padding: 5px;
+      font-size: 0.9rem;
     }
     .tabla th {
       background-color: #333;
@@ -57,14 +51,9 @@
     }
     .tabla td {
       background-color: #000;
-      color: #fff;
     }
     .free {
       color: #d4af37;
-      font-weight: bold;
-    }
-    .cd {
-      color: #d4af37; /* Color dorado para "CD" */
       font-weight: bold;
     }
   </style>
@@ -74,18 +63,60 @@
   <div class="galeria" id="galeria"></div>
 
   <script>
-    // Los cartones pre-generados (usando un ejemplo de cartones fijos)
-    const cartonesFijos = [
-      {
-        id: "Cartón 001",
-        B: [1, 2, 3, 4, 5],
-        I: [16, 17, 18, 19, 20],
-        N: [31, 32, "CD", 34, 35],
-        G: [46, 47, 48, 49, 50],
-        O: [61, 62, 63, 64, 65]
-      },
-      // Puedes agregar más cartones de esta forma
-    ];
+    // Función para generar un rango de números
+    function generarRango(inicio, fin) {
+      const nums = [];
+      for (let i = inicio; i <= fin; i++) nums.push(i);
+      return nums;
+    }
+
+    // Función para obtener números únicos aleatorios de un rango
+    function obtenerNumerosUnicos(rango, cantidad) {
+      const numeros = [...rango];
+      const seleccionados = [];
+      while (seleccionados.length < cantidad) {
+        const indice = Math.floor(Math.random() * numeros.length);
+        const numero = numeros.splice(indice, 1)[0]; // Eliminar el número para evitar duplicados
+        seleccionados.push(numero);
+      }
+      return seleccionados;
+    }
+
+    // Función para crear los cartones fijos
+    function generarCartonesUnicos() {
+      const cartonesGenerados = [];
+      
+      const rangoB = generarRango(1, 15);
+      const rangoI = generarRango(16, 30);
+      const rangoN = generarRango(31, 45);
+      const rangoG = generarRango(46, 60);
+      const rangoO = generarRango(61, 75);
+
+      for (let i = 1; i <= 180; i++) {
+        const B = obtenerNumerosUnicos(rangoB, 5);
+        const I = obtenerNumerosUnicos(rangoI, 5);
+        const N = obtenerNumerosUnicos(rangoN, 4); // 4 porque el centro es "FREE"
+        const G = obtenerNumerosUnicos(rangoG, 5);
+        const O = obtenerNumerosUnicos(rangoO, 5);
+
+        // Aseguramos que "FREE" esté en la posición central
+        N.splice(2, 0, "FREE");
+
+        const carton = {
+          id: `Cartón ${i.toString().padStart(3, "0")}`,
+          B,
+          I,
+          N,
+          G,
+          O
+        };
+
+        cartonesGenerados.push(carton);
+      }
+      return cartonesGenerados;
+    }
+
+    const cartonesFijos = generarCartonesUnicos();
 
     // Función para crear el HTML de cada cartón
     function crearCarton(carton) {
@@ -107,7 +138,7 @@
             <tbody>
               ${tabla.map(fila => `
                 <tr>
-                  ${fila.map(val => `<td class="${val === 'CD' ? 'cd' : ''}">${val}</td>`).join('')}
+                  ${fila.map(val => `<td class="${val === 'FREE' ? 'free' : ''}">${val}</td>`).join('')}
                 </tr>
               `).join('')}
             </tbody>
