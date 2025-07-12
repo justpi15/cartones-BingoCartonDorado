@@ -7,7 +7,6 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      background: url('https://www.transparenttextures.com/patterns/asfalt.png'); /* Textura sutil */
       background-color: #111;
       color: #fff;
       margin: 0;
@@ -20,25 +19,20 @@
     }
     .galeria {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Aumento de tamaño de cartón */
-      gap: 30px; /* Espacio entre los cartones */
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Rejilla con 3-5 cartones por fila */
+      gap: 20px;
     }
     .carton {
       background-color: #222;
       border: 2px solid #d4af37;
-      border-radius: 15px;
-      padding: 20px;
-      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
-      max-width: 300px;
-      transition: transform 0.2s ease-in-out;
-    }
-    .carton:hover {
-      transform: scale(1.05); /* Efecto al pasar el mouse */
+      border-radius: 10px;
+      padding: 10px;
+      box-shadow: 0 0 10px #000;
     }
     .carton h2 {
       text-align: center;
       color: #fff;
-      font-size: 1.2rem;
+      font-size: 1rem;
       margin-bottom: 10px;
     }
     .tabla {
@@ -48,8 +42,8 @@
     }
     .tabla th, .tabla td {
       border: 1px solid #555;
-      padding: 15px;
-      font-size: 1.2rem; /* Tamaño más grande para las celdas */
+      padding: 5px;
+      font-size: 0.9rem;
     }
     .tabla th {
       background-color: #333;
@@ -57,53 +51,31 @@
     }
     .tabla td {
       background-color: #000;
-      color: #fff;
     }
     .free {
-      color: #d4af37;
-      font-weight: bold;
-    }
-    .cd {
       color: #d4af37;
       font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <h1>🎫 Galería de Cartones Fijos</h1>
+  <h1>🎫 Galería de Cartones de Bingo</h1>
   <div class="galeria" id="galeria"></div>
 
   <script>
-    // Lista de los cartones con los números proporcionados
     const cartonesFijos = [
-      {
-        id: 'Cartón 001',
-        B: [10, 8, 7, 12, 6],
-        I: [19, 27, 25, 29, 20],
-        N: [38, 43, 'CD', 36, 44],
-        G: [54, 59, 52, 58, 49],
-        O: [61, 74, 67, 72, 66],
-      },
-      {
-        id: 'Cartón 002',
-        B: [4, 8, 7, 11, 15],
-        I: [26, 18, 27, 23, 25],
-        N: [31, 42, 'CD', 41, 39],
-        G: [54, 52, 59, 48, 46],
-        O: [67, 65, 68, 66, 71],
-      },
-      {
-        id: 'Cartón 003',
-        B: [7, 15, 14, 1, 11],
-        I: [21, 18, 26, 17, 28],
-        N: [41, 35, 'CD', 40, 31],
-        G: [58, 46, 57, 60, 51],
-        O: [70, 73, 63, 75, 65],
-      },
-      // ... Agrega los demás cartones aquí siguiendo el mismo formato
+      { id: "Cartón 001", B: [10, 8, 7, 12, 6], I: [19, 27, 25, 29, 20], N: [38, 43, "cartón Dorado", 36, 44], G: [54, 59, 52, 58, 49], O: [61, 74, 67, 72, 66] },
+      { id: "Cartón 002", B: [4, 8, 11, 7, 15], I: [26, 18, 23, 27, 25], N: [31, 42, "FREE", 41, 39], G: [54, 52, 48, 60, 46], O: [67, 65, 66, 68, 71] },
+      { id: "Cartón 003", B: [7, 15, 14, 1, 11], I: [21, 18, 26, 17, 28], N: [41, 35, "FREE", 40, 31], G: [58, 46, 57, 60, 51], O: [70, 73, 63, 75, 65] },
+      { id: "Cartón 004", B: [3, 1, 4, 13, 8], I: [24, 25, 17, 29, 19], N: [39, 37, "FREE", 41, 35], G: [46, 55, 60, 50, 56], O: [69, 71, 66, 73, 66] },
+      { id: "Cartón 005", B: [13, 25, 44, 59, 75], I: [7, 19, 38, 57, 62], N: [10, 26, "FREE", 46, 69], G: [8, 17, 35, 60, 65], O: [11, 23, 40, 50, 67] },
+      { id: "Cartón 006", B: [14, 27, 32, 53, 74], I: [1, 28, 41, 51, 68], N: [13, 19, "FREE", 47, 69], G: [15, 20, 45, 54, 61], O: [7, 21, 37, 55, 72] },
+      { id: "Cartón 007", B: [3, 20, 45, 60, 71], I: [10, 21, 44, 47, 69], N: [12, 18, "FREE", 59, 64], G: [2, 25, 33, 52, 61], O: [4, 27, 43, 49, 65] },
+      { id: "Cartón 008", B: [3, 29, 42, 47, 74], I: [13, 23, 44, 54, 72], N: [12, 22, "FREE", 55, 63], G: [11, 20, 36, 49, 66], O: [10, 28, 45, 56, 61] },
+      { id: "Cartón 009", B: [11, 26, 34, 59, 65], I: [15, 19, 31, 56, 74], N: [6, 20, "FREE", 50, 69], G: [9, 16, 37, 52, 75], O: [8, 18, 39, 60, 72] },
+      { id: "Cartón 010", B: [4, 17, 43, 54, 68], I: [8, 30, 37, 56, 74], N: [6, 26, "FREE", 59, 65], G: [10, 27, 33, 58, 63], O: [13, 21, 40, 53, 70] }
     ];
 
-    // Función para crear el HTML de cada cartón
     function crearCarton(carton) {
       const tabla = [
         [carton.B[0], carton.I[0], carton.N[0], carton.G[0], carton.O[0]],
@@ -123,7 +95,7 @@
             <tbody>
               ${tabla.map(fila => `
                 <tr>
-                  ${fila.map(val => `<td class="${val === 'CD' ? 'cd' : ''}">${val}</td>`).join('')}
+                  ${fila.map(val => `<td class="${val === 'FREE' ? 'free' : ''}">${val}</td>`).join('')}
                 </tr>
               `).join('')}
             </tbody>
@@ -133,7 +105,6 @@
       return html;
     }
 
-    // Insertamos los cartones generados en la galería
     const contenedor = document.getElementById("galeria");
     cartonesFijos.forEach(carton => {
       contenedor.innerHTML += crearCarton(carton);
