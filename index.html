@@ -7,6 +7,7 @@
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
+      background: url('https://www.transparenttextures.com/patterns/asfalt.png'); /* Textura sutil */
       background-color: #111;
       color: #fff;
       margin: 0;
@@ -19,20 +20,25 @@
     }
     .galeria {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Rejilla con 3-5 cartones por fila */
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Aumento de tamaño de cartón */
+      gap: 30px; /* Espacio entre los cartones */
     }
     .carton {
       background-color: #222;
       border: 2px solid #d4af37;
-      border-radius: 10px;
-      padding: 10px;
-      box-shadow: 0 0 10px #000;
+      border-radius: 15px;
+      padding: 20px;
+      box-shadow: 0 0 15px rgba(0, 0, 0, 0.8);
+      max-width: 300px;
+      transition: transform 0.2s ease-in-out;
+    }
+    .carton:hover {
+      transform: scale(1.05); /* Efecto al pasar el mouse */
     }
     .carton h2 {
       text-align: center;
       color: #fff;
-      font-size: 1rem;
+      font-size: 1.2rem;
       margin-bottom: 10px;
     }
     .tabla {
@@ -42,8 +48,8 @@
     }
     .tabla th, .tabla td {
       border: 1px solid #555;
-      padding: 5px;
-      font-size: 0.9rem;
+      padding: 15px;
+      font-size: 1.2rem; /* Tamaño más grande para las celdas */
     }
     .tabla th {
       background-color: #333;
@@ -51,8 +57,13 @@
     }
     .tabla td {
       background-color: #000;
+      color: #fff;
     }
     .free {
+      color: #d4af37;
+      font-weight: bold;
+    }
+    .cd {
       color: #d4af37;
       font-weight: bold;
     }
@@ -95,12 +106,12 @@
       for (let i = 1; i <= 180; i++) {
         const B = obtenerNumerosUnicos(rangoB, 5);
         const I = obtenerNumerosUnicos(rangoI, 5);
-        const N = obtenerNumerosUnicos(rangoN, 4); // 4 porque el centro es "FREE"
+        const N = obtenerNumerosUnicos(rangoN, 4); // 4 porque el centro es "CD"
         const G = obtenerNumerosUnicos(rangoG, 5);
         const O = obtenerNumerosUnicos(rangoO, 5);
 
-        // Aseguramos que "FREE" esté en la posición central
-        N.splice(2, 0, "FREE");
+        // Aseguramos que "CD" esté en la posición central
+        N.splice(2, 0, "CD");
 
         const carton = {
           id: `Cartón ${i.toString().padStart(3, "0")}`,
@@ -138,7 +149,7 @@
             <tbody>
               ${tabla.map(fila => `
                 <tr>
-                  ${fila.map(val => `<td class="${val === 'FREE' ? 'free' : ''}">${val}</td>`).join('')}
+                  ${fila.map(val => `<td class="${val === 'CD' ? 'cd' : ''}">${val}</td>`).join('')}
                 </tr>
               `).join('')}
             </tbody>
