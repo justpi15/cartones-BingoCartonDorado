@@ -127,7 +127,14 @@
       return cartonesGenerados;
     }
 
-    const cartonesFijos = generarCartonesUnicos();
+    // Intentar obtener cartones del localStorage si ya existen
+    let cartonesFijos = JSON.parse(localStorage.getItem('cartonesFijos'));
+    
+    // Si no existen cartones, generarlos y guardarlos en localStorage
+    if (!cartonesFijos) {
+      cartonesFijos = generarCartonesUnicos();
+      localStorage.setItem('cartonesFijos', JSON.stringify(cartonesFijos));
+    }
 
     // Función para crear el HTML de cada cartón
     function crearCarton(carton) {
